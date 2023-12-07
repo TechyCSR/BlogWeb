@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+
+<div class="alert" role="alert" id="alertBox">
+  <span class="alert-text">{{ message }}</span>
+  <button type="button" class="dismiss-btn" aria-label="Close" onclick="dismissAlert()">×</button>
+</div>
+
+{% endfor %}
+
+<br/>
+<h1>Edit Post...</h1>
+<div>
+	<form method="POST">
+		{{ form.hidden_tag() }}
+
+		{{ form.title.label(class="form-label") }}
+
+		{{ form.title(class="form-control") }}
+		<br/>
+
+
+		{{ form.tags.label(class="form-label") }}
+
+		{{ form.tags(class="form-control") }}
+		<br/>
+
+		{{ form.content.label(class="form-label") }}
+
+		{{ form.content(class="form-control", rows="7", maxlength="300") }}
+		<small class="form-text text-muted">Maximum 300 characters</small>
+    <br/>
+
+
+		{{ form.submit(class="btn btn-secondary") }}
+
+
+	</form>
+
+</div>
+
+<a href="{{ url_for('posts')}}" class="btn btn-outline-secondary btn-sm">Back To Blog</a><br><br>
+
+{% endblock %}

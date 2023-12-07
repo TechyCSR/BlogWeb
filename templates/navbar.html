@@ -1,0 +1,42 @@
+<header class="container">
+    <nav>
+        <ul>
+        <a href="{{ url_for('index') }}"><strong>Akasa Chronicles</strong></a>
+        </ul>
+    
+          <ul>
+    
+            <li>
+              <a href="{{ url_for('posts')}}" class="secondary">All Posts</a>
+            </li>
+    
+            {% if current_user.is_authenticated %}
+    
+              <li>
+              <a href="{{ url_for('my_posts')}}" class="secondary"> My Posts</a>
+            </li>
+    
+            <li>
+              <a href="{{ url_for('add_post')}}" class="secondary">Add Post</a>
+            </li>
+    
+    
+            {% else %}
+              <li>
+                <a href="{{ url_for('add_user')}}" class="secondary">Register</a>
+              </li>
+              <li>
+                <a href="{{ url_for('login')}}" class="secondary">Login</a>
+              </li>
+            {% endif %}
+    
+    
+            {% if current_user.is_authenticated %}
+              <li>
+                <a href="{{ url_for('logout')}}" class="secondary">Logout ({{ current_user.username }})</a>
+              </li>
+              {% endif %}
+    
+          </ul>
+    </nav>
+    </header>

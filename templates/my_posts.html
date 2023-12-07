@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert" role="alert" id="alertBox">
+  <span>{{ message }}</span>
+  <button type="button" class="dismiss-btn" aria-label="Close" onclick="dismissAlert()">×</button>
+</div>
+{% endfor %}
+
+<form method="POST" action="{{ url_for('search')}}">
+        {{ form.hidden_tag() }}
+<input type="search" id="search" name="search" placeholder="Search by tag">
+</form>
+
+{% for post in posts %}
+	{% if post.poster_id == current_user.id %}
+<article>
+	<header>
+	    <div class="grid">
+  <div><strong><a href="{{ url_for('post', id=post.id)}}">{{ post.title }}</a></strong></div>
+  <div style="text-align:right">{{ post.date_posted }}</div>
+</div>
+	    </header>
+
+	{{ post.content|safe }}
+
+
+<footer>
+    	    <div class="grid">
+  <div><strong>Posted by {{ post.poster.name }}</strong><br>
+    <strong>Tags: {{ post.tags }}</strong></div>
+  <div style="text-align:right"><strong>Likes: {{ post.likes.filter_by(like_status=True).count() }}</strong><br>
+<strong>Dislikes: {{ post.likes.filter_by(like_status=False).count() }}</strong></div>
+</div>
+    <br>
+<div class="grid">
+<div>
+	<a role="button" href="{{ url_for('post', id=post.id)}}">View Post</a>
+
+	{% if post.poster_id == current_user.id %}
+	<a role="button" href="{{ url_for('edit_post', id=post.id)}}">Edit Post</a>
+
+	<a role="button" class="secondary" href="{{ url_for('delete_post', id=post.id)}}">Delete Post</a>
+
+	{% endif %}
+
+</div>
+<div style="display: flex; justify-content: flex-end;">
+
+{% if current_user.is_authenticated %}
+    {% set user_reaction = post.likes.filter_by(user_id=current_user.id).first() %}
+
+    {% if user_reaction %}
+        {% if user_reaction.like_status %}
+            <a role="button" style="background-color:#D93B3B;; margin-right: 2px;" href="{{ url_for('like_post', post_id=post.id) }}">Unlike</a>
+        {% else %}
+            <a role="button" style="background-color:#65C55C;; margin-right: 2px;" href="{{ url_for('dislike_post', post_id=post.id) }}">Undislike</a>
+        {% endif %}
+    {% else %}
+        <a role="button" style="background-color:#65C55C;; margin-right: 2px;" href="{{ url_for('like_post', post_id=post.id) }}">Like</a>
+        <a role="button" style="background-color:#D93B3B;; margin-right: 2px;" href="{{ url_for('dislike_post', post_id=post.id) }}">Dislike</a>
+    {% endif %}
+{% endif %}
+</div>
+</div>
+
+</footer>
+</article>
+	{% endif %}
+{% endfor %}
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+{% for message in get_flashed_messages() %}
+
+<div class="alert" role="alert" id="alertBox">
+  <span class="alert-text">{{ message }}</span>
+  <button type="button" class="dismiss-btn" aria-label="Close" onclick="dismissAlert()">×</button>
+</div>
+
+{% endfor %}
+
+{% if current_user.is_authenticated %}
+
+<h1>Add Blog Post...</h1>
+<div>
+	<form method="POST">
+		{{ form.hidden_tag() }}
+
+		{{ form.title.label(class="form-label") }}
+
+		{{ form.title(class="form-control") }}
+		<br/>
+
+
+		{{ form.tags.label(class="form-label") }}
+
+		{{ form.tags(class="form-control") }}
+		<br/>
+
+		{{ form.content.label(class="form-label") }}
+
+		{{ form.content(class="form-control", rows="7", maxlength="300") }}
+		<small class="form-text text-muted">Maximum 300 characters</small>
+    <br/>
+
+
+		{{ form.submit(class="btn btn-secondary") }}
+
+
+	</form>
+
+</div>
+<a href="{{ url_for('posts')}}" class="btn btn-outline-secondary btn-sm">Back To Blog</a><br><br>
+{% else %}
+<h2>Must Be Logged In...</h2>
+<p>Sorry, You must be logged in to access this page!</p>
+
+<a href="{{ url_for('login') }}">Login Here</a>
+
+{% endif %}
+
+
+{% endblock %}
